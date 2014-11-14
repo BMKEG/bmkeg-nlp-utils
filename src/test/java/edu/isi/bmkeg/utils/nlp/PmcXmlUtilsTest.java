@@ -67,7 +67,7 @@ public class PmcXmlUtilsTest extends TestCase
 			int pos = f.lastIndexOf("_pmc.xml");
 			if( pos != -1 ) {
 				f = f.substring(0, pos);
-				File htmlFile = new File( f + ".html" );
+				File htmlFile = new File( f + "_pmc.html" );
 				File outputFile = new File( f + ".txt" );
 	
 				XmlUtils.writePmcXmlToHtmlFile(inputFile, htmlFile);

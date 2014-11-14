@@ -266,12 +266,11 @@ OTHER PROCESSING IS IDENTICAL.
       </div>
     </xsl:for-each>
 
-    <!-- THIS SECTION IS REMOVED 
     <xsl:if test="back | $loose-footnotes"> 
       <div id="{$this-article}-back" class="back">
         <xsl:call-template name="make-back"/>
       </div>
-    </xsl:if> -->
+    </xsl:if> 
 
     <xsl:for-each select="floats-group | floats-wrap">
       <div id="{$this-article}-floats" class="back">

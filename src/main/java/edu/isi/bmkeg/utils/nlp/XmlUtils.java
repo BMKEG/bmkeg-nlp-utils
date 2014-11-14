@@ -43,7 +43,7 @@ public class XmlUtils {
 
 		// stylesheet
 		Resource xslResource = new ClassPathResource(
-				"jatsPreviewStyleSheets/xslt/main/jats-html-textOnly.xsl");
+				"jatsPreviewStyleSheets/xslt/main/jats-html.xsl");
 		StreamSource xslt = new StreamSource(xslResource.getInputStream());
 		Transformer transformer = tf.newTransformer(xslt);
 
@@ -72,16 +72,40 @@ public class XmlUtils {
 		Document doc = Jsoup.parse(html);
 
 		String plainText = "";
+		String title = "";
+		String abstr = "";
 
 		Elements bodyEls = doc.select("div");
 		for (Element bodyEl : bodyEls) {
+			for (Node n : bodyEl.getElementsByClass("document-title")) {
+				title += ((Element)n).text();
+			}
 			for (Node n : bodyEl.select("tr")) {
 				n.remove();
 			}
 			for (Node n : bodyEl.getElementsByClass("object-id")) {
 				n.remove();
 			}
-			for (Node n : bodyEl.select("a")) {
+			for (Node n : bodyEl.getElementsByClass("ref-list")) {
+				if( n.parentNode() != null ) {
+					n.remove();
+				}
+			}
+			for (Node n : bodyEl.getElementsByClass("footnote")) {
+				if( n.parentNode() != null ) {
+					n.remove();
+				}
+			}
+			for (Node n : bodyEl.getElementsByClass("metadata")) {
+				if( n.parentNode() != null && !n.toString().contains("Abstract")) {
+					n.remove();
+				}
+			}
+			for (Node n : bodyEl.getElementsByClass("branding")) {
+				if( n.parentNode() != null ) {
+					n.remove();
+				}
+			}			for (Node n : bodyEl.select("a")) {
 				addFormattingSuffixes((Element) n, "A");
 			}
 			for (Node n : bodyEl.select("i")) {
@@ -123,6 +147,7 @@ public class XmlUtils {
 		t = t.replaceAll("__e_P__", "\n") + "\n";
 
 		plainText += t;
+		plainText = title + plainText;
 
 		return plainText;
 
